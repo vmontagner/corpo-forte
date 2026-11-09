@@ -27,18 +27,31 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 .calendar-grid .trained{background:var(--green);color:#102018;font-weight:800}
 .calendar-grid .today{outline:1px solid var(--green)}
 .hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
-</style></head><body>
-<header><div class="row"><div><h1>Projeto Corpo Forte</h1><p>Treino de academia · força, função e autonomia</p></div><button class="ghost" id="check-update" style="font-size:.78rem;padding:8px 9px">↻ Atualizar</button></div><p id="update-status" class="small" aria-live="polite" style="margin-top:7px"></p></header>
-<main>
-<section class="card" id="cloud-card"><div class="row"><h2>Conta e sincronização</h2><span class="tag" id="cloud-status">Não configurado</span></div>
-<p class="small" id="cloud-message">A sincronização em nuvem precisa ser configurada com seu projeto Supabase. Até lá, seus dados continuam salvos neste aparelho.</p>
-<div id="cloud-config" class="hidden"><label class="small">E-mail<input id="auth-email" type="email" placeholder="voce@email.com" autocomplete="email"></label><label class="small">Senha<input id="auth-password" type="password" placeholder="Sua senha" autocomplete="current-password"></label>
-<div class="actions"><button class="primary" id="signup">Criar conta</button><button id="signin">Entrar</button><button class="ghost" id="signout">Sair</button></div><div class="actions"><button id="sync-now">Sincronizar agora</button></div></div></section>
+
+.auth-screen{min-height:100dvh;display:grid;place-items:center;padding:24px}
+.auth-panel{width:min(100%,430px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+.auth-panel h1{margin-bottom:6px}.auth-panel input{width:100%;background:#101815;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;margin:7px 0 14px}
+.auth-panel label{display:block;color:var(--muted);font-size:.88rem}
+.app-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.user-chip{display:flex;align-items:center;gap:8px;min-width:0}.user-chip span{overflow-wrap:anywhere}
+.nav-tabs{display:flex;gap:8px;margin:12px 0 16px}.nav-tabs button{flex:1}
+</style></head><body> 
+<section id="auth-screen" class="auth-screen"><div class="auth-panel">
+<h1>Projeto Corpo Forte</h1><p class="small">Entre para acessar seus treinos e manter seu histórico sincronizado.</p>
+<label>E-mail<input id="auth-email" type="email" placeholder="voce@email.com" autocomplete="email"></label>
+<label>Senha<input id="auth-password" type="password" placeholder="Sua senha" autocomplete="current-password"></label>
+<div class="actions"><button class="primary" id="signin">Entrar</button><button id="signup">Criar conta</button></div>
+<p id="auth-message" class="small" aria-live="polite">Use seu e-mail e senha cadastrados.</p>
+</div></section>
+<div id="app-shell" class="hidden">
+<header><div class="app-header"><div><h1>Projeto Corpo Forte</h1><p>Força, função e autonomia</p></div><div class="user-chip"><span id="user-email" class="small"></span><button class="ghost" id="open-options" style="padding:8px 10px">⚙</button></div></div><p id="update-status" class="small" aria-live="polite" style="margin-top:7px"></p></header>
+<main><div class="nav-tabs"><button class="tab active" data-page="training">Treinos</button><button class="tab" data-page="options">Opções</button></div>
+<section id="training-page">
 <section class="card"><div class="row"><div><div class="small">ROTINA SUGERIDA</div><strong>3 sessões de corpo inteiro</strong></div><span class="tag">A / B</span></div>
 <p class="small">Exemplo: seg A · qua B · sex A; na semana seguinte, B · A · B. Se só conseguir 2 dias, faça A e B.</p></section>
 <section class="card" id="phase-card"><div class="row"><h2>Seu estágio de adaptação</h2><span class="tag" id="phase-tag">Fase 1</span></div><strong id="phase-name">Readaptação</strong><p id="phase-desc" class="small"></p><div class="progress"><div class="bar" id="phase-bar"></div></div><p id="phase-next" class="small"></p><p class="tip">A etapa é uma referência pelo tempo desde seu primeiro treino registrado. Só avance se estiver recuperando bem, sem dor articular crescente ou fadiga persistente.</p></section>
-<section class="card" id="calendar-card"><div class="row"><h2>Calendário de treinos</h2><div class="actions" style="margin:0"><button class="ghost" id="prev-month">‹</button><button class="ghost" id="next-month">›</button></div></div><div class="row"><strong id="calendar-title"></strong><span class="small">● treino registrado</span></div><div id="calendar-grid" class="calendar-grid"></div><p class="small">Dias marcados correspondem às sessões salvas no histórico.</p></section>
-<div class="tabs"><button class="tab active" data-session="A">Treino A</button><button class="tab" data-session="B">Treino B</button><button class="tab" data-session="history">Histórico</button></div>
+
+<div class="tabs"><button class="tab active" data-session="A">Treino A</button><button class="tab" data-session="B">Treino B</button></div>
 <section id="workout">
 <div class="card"><div class="row"><h2 id="session-title">Treino A · Base de força</h2><strong id="count">0/6</strong></div><div class="progress"><div class="bar" id="bar"></div></div><div class="small" id="progress-label">Marque os exercícios concluídos.</div></div>
 <div class="card"><h2>Aquecimento · escolha uma opção</h2><p class="small">Faça 5–8 minutos no total. Selecione o que realizou nesta sessão.</p>
@@ -47,15 +60,21 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 <label class="exercise"><input type="radio" name="warmup" value="Elíptico: 5–7 min em ritmo confortável"> Elíptico — ritmo confortável (5–7 min)</label>
 <p class="tip">Depois, faça 1–3 séries leves de aproximação do primeiro exercício. O aquecimento não deve cansar. Para o joelho, escolha a opção mais confortável naquele dia.</p></div>
 <div class="card" id="exercise-list"></div>
-<div class="card"><h2>Anotações da sessão</h2><textarea id="notes" placeholder="Como foi? Cargas, esforço, desconfortos..."></textarea><div class="actions"><button class="primary" id="finish">Salvar sessão</button><button class="ghost" id="reset">Desmarcar</button></div><p class="small">Registros ficam neste aparelho e navegador. Exporte um backup periodicamente.</p></div>
+<div class="card"><h2>Anotações da sessão</h2><textarea id="notes" placeholder="Como foi? Cargas, esforço, desconfortos..."></textarea><div class="actions"><button class="primary" id="finish">Salvar sessão</button><button class="ghost" id="reset">Desmarcar</button></div><p class="small">Registros são salvos neste aparelho e sincronizados com sua conta quando conectado.</p></div>
 </section>
-<section id="history" class="hidden"><div class="card"><h2>Histórico</h2><div class="stats"><div class="stat"><span class="small">Sessões salvas</span><strong id="total">0</strong></div><div class="stat"><span class="small">Último treino</span><strong id="last" style="font-size:1rem">—</strong></div></div><div class="actions"><button class="primary" id="export">Exportar backup</button><button class="ghost" id="import-btn">Importar backup</button><input class="hidden" type="file" id="import-file" accept="application/json"></div><div id="history-list"></div></div></section>
+</section>
+<section id="options-page" class="hidden">
+<section class="card" id="cloud-card"><div class="row"><h2>Conta e sincronização</h2><span class="tag" id="cloud-status">Conectando…</span></div><p class="small" id="cloud-message">Verificando sua conta…</p><div class="actions"><button class="primary" id="sync-now">Sincronizar agora</button><button class="ghost" id="signout">Sair da conta</button></div></section>
+<section class="card" id="calendar-card"><div class="row"><h2>Calendário de treinos</h2><div class="actions" style="margin:0"><button class="ghost" id="prev-month">‹</button><button class="ghost" id="next-month">›</button></div></div><div class="row"><strong id="calendar-title"></strong><span class="small">● treino registrado</span></div><div id="calendar-grid" class="calendar-grid"></div><p class="small">Dias marcados correspondem às sessões salvas no histórico.</p></section>
+<section id="history"><div class="card"><h2>Histórico</h2><div class="stats"><div class="stat"><span class="small">Sessões salvas</span><strong id="total">0</strong></div><div class="stat"><span class="small">Último treino</span><strong id="last" style="font-size:1rem">—</strong></div></div><div class="actions"><button class="primary" id="export">Exportar backup</button><button class="ghost" id="import-btn">Importar backup</button><input class="hidden" type="file" id="import-file" accept="application/json"></div><div id="history-list"></div></div></section>
 <section class="card"><h2>Como usar o programa</h2>
 <p><b>Esforço:</b> termine a maioria das séries sentindo que ainda conseguiria fazer 2–3 repetições com técnica boa (RIR 2–3). Não precisa falhar.</p>
 <p><b>Progressão:</b> quando fizer o máximo da faixa em todas as séries com boa técnica, aumente a menor carga disponível e volte ao início da faixa.</p>
 <p><b>Descanso:</b> em geral 2–3 min nos exercícios principais e 1–2 min nos acessórios. Faça 5–8 min de aquecimento geral e séries leves de aproximação antes do primeiro exercício pesado.</p>
 <p><b>Joelho:</b> use amplitude confortável e controlada. Aumente carga e amplitude gradualmente; reduza ou interrompa se houver dor crescente, inchaço, falseio ou piora no dia seguinte. Exercícios unilaterais podem começar com apoio.</p>
 <p class="small">A ACSM 2026 destaca treino progressivo, esforço alto, grandes grupos musculares pelo menos 2x/semana; 2–3 séries por sessão para força e cerca de 10 séries semanais por músculo como referência para maximizar hipertrofia. Não é necessário treinar até a falha nem usar técnicas avançadas.</p></section>
+<div class="actions"><button class="ghost" id="check-update">↻ Verificar atualização</button></div>
+</section>
 <footer>Baseado no Position Stand da ACSM de 2026. Ajuste individual com profissional de educação física/fisioterapeuta.</footer>
 </main>
 <script>
@@ -63,7 +82,7 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 const SUPABASE_URL = "https://vrsmwmjrgpuragzkskok.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_cHoEwLWe-yJLOpYVIquvJA_eKPIzL7b";
 const cloudReady=SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length>30 && !SUPABASE_URL.includes("COLE_AQUI");
-const cloud=cloudReady && window.supabase ? window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY) : null;
+const cloud=cloudReady && window.supabase ? window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}) : null;
 let cloudUser=null;
 const data={
  A:{title:"Treino A · Base de força",items:[
@@ -90,10 +109,19 @@ function history(){try{return JSON.parse(localStorage.getItem("pcf-gym-history")
 function save(){localStorage.setItem("pcf-gym-draft",JSON.stringify({checks,loads,notes,warmups,session}))}
 function setCloudStatus(label,msg){$("cloud-status").textContent=label;$("cloud-message").textContent=msg}
 async function refreshAuth(){
- if(!cloud){$("cloud-config").classList.add("hidden");setCloudStatus("Não configurado","Para ativar a nuvem, configure a URL e a chave pública do Supabase nos arquivos do aplicativo. Seus dados locais permanecem intactos.");return}
- $("cloud-config").classList.remove("hidden");
- const {data:{session}}=await cloud.auth.getSession();cloudUser=session?.user||null;
- if(cloudUser){setCloudStatus("Conectado",`Conectado como ${cloudUser.email}. Seus registros podem ser sincronizados.`);await pullCloud()}else setCloudStatus("Desconectado","Entre ou crie uma conta para sincronizar seus treinos.");
+ if(!cloud){$("auth-message").textContent="Não foi possível conectar ao serviço de autenticação.";return}
+ const {data:{session},error}=await cloud.auth.getSession();
+ if(error){$("auth-message").textContent=error.message;return}
+ cloudUser=session?.user||null;
+ if(cloudUser){
+  $("auth-screen").classList.add("hidden");$("app-shell").classList.remove("hidden");
+  $("user-email").textContent=cloudUser.email||"Conta conectada";
+  setCloudStatus("Conectado",`Conectado como ${cloudUser.email}.`);
+  await pullCloud();
+ }else{
+  $("app-shell").classList.add("hidden");$("auth-screen").classList.remove("hidden");
+  $("auth-message").textContent="Entre com seu e-mail e senha para continuar.";
+ }
 }
 async function pushCloud(){
  if(!cloudUser){setCloudStatus("Desconectado","Entre na sua conta antes de sincronizar.");return}
@@ -114,14 +142,16 @@ async function pullCloud(){
  render();
 }
 async function authAction(kind){
- if(!cloud){alert("A nuvem ainda não foi configurada no Supabase.");return}
+ if(!cloud){$("auth-message").textContent="A conexão com a nuvem não está disponível.";return}
  const email=$("auth-email").value.trim(),password=$("auth-password").value;
- if(!email||!password){alert("Informe e-mail e senha.");return}
- const result=kind==="signup"?await cloud.auth.signUp({email,password}):await cloud.auth.signInWithPassword({email,password});
- if(result.error){setCloudStatus("Falha no acesso",result.error.message);return}
+ if(!email||!password){$("auth-message").textContent="Informe e-mail e senha.";return}
+ $("auth-message").textContent=kind==="signup"?"Criando sua conta…":"Entrando…";
+ const result=kind==="signup"
+  ?await cloud.auth.signUp({email,password,options:{emailRedirectTo:"https://vmontagner.github.io/corpo-forte/"}})
+  :await cloud.auth.signInWithPassword({email,password});
+ if(result.error){$("auth-message").textContent=result.error.message;return}
+ if(kind==="signup"&&!result.data.session){$("auth-message").textContent="Conta criada! Confirme seu e-mail pelo link enviado e depois volte para entrar.";return}
  await refreshAuth();
- if(kind==="signup"&&!result.data.session)setCloudStatus("Confirme seu e-mail","Enviamos um link de confirmação. Confirme o cadastro antes de entrar.");
- else await pushCloud();
 }
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -147,9 +177,7 @@ function renderPhase(){
 }
 function render(){
  renderCalendar();renderPhase();
- document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.session===session));
- $("workout").classList.toggle("hidden",session==="history");$("history").classList.toggle("hidden",session!=="history");
- if(session==="history"){renderHistory();return}
+ document.querySelectorAll("[data-session]").forEach(x=>x.classList.toggle("active",x.dataset.session===session));
  $("session-title").textContent=data[session].title;$("notes").value=notes[session]||"";
  document.querySelectorAll('input[name="warmup"]').forEach(el=>el.checked=el.value===(warmups[session]||""));
  const items=data[session].items,done=checks[session]||[];$("count").textContent=`${done.length}/${items.length}`;$("bar").style.width=(done.length/items.length*100)+"%";
@@ -160,7 +188,15 @@ function render(){
 }
 $("prev-month").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);renderCalendar()});
 $("next-month").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);renderCalendar()});
-document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>{notes[session]=$("notes").value;session=el.dataset.session;save();render()}));
+document.querySelectorAll("[data-session]").forEach(el=>el.addEventListener("click",()=>{notes[session]=$("notes").value;session=el.dataset.session;save();render()}));
+function showPage(page){
+ $("training-page").classList.toggle("hidden",page!=="training");
+ $("options-page").classList.toggle("hidden",page!=="options");
+ document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===page));
+ if(page==="options"){renderHistory();renderCalendar()}
+}
+document.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",()=>showPage(el.dataset.page)));
+$("open-options").addEventListener("click",()=>showPage("options"));
 document.querySelectorAll('input[name="warmup"]').forEach(el=>el.addEventListener("change",()=>{warmups[session]=el.value;save()}));
 $("notes").addEventListener("input",()=>{notes[session]=$("notes").value;save()});
 $("reset").addEventListener("click",()=>{if(confirm("Desmarcar os exercícios desta sessão?")){checks[session]=[];render()}});
@@ -171,7 +207,7 @@ $("import-btn").addEventListener("click",()=>$("import-file").click());
 $("import-file").addEventListener("change",async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text());if(Array.isArray(x.history))localStorage.setItem("pcf-gym-history",JSON.stringify(x.history));if(x.draft){checks=x.draft.checks||checks;loads=x.draft.loads||loads;notes=x.draft.notes||notes;warmups=x.draft.warmups||warmups;session=x.draft.session||session;save()}alert("Backup importado.");render()}catch{alert("Backup inválido.")}});
 $("signup").addEventListener("click",()=>authAction("signup"));
 $("signin").addEventListener("click",()=>authAction("signin"));
-$("signout").addEventListener("click",async()=>{if(cloud){await cloud.auth.signOut();cloudUser=null;setCloudStatus("Desconectado","Você saiu da sua conta.")}});
+$("signout").addEventListener("click",async()=>{if(cloud){await cloud.auth.signOut();cloudUser=null;$("app-shell").classList.add("hidden");$("auth-screen").classList.remove("hidden");$("auth-message").textContent="Você saiu da sua conta."}});
 $("sync-now").addEventListener("click",async()=>{await pushCloud()});
 if(cloud)cloud.auth.onAuthStateChange(()=>setTimeout(refreshAuth,0));
 try{let x=JSON.parse(localStorage.getItem("pcf-gym-draft")||"{}");checks=x.checks||checks;loads=x.loads||loads;notes=x.notes||notes;warmups=x.warmups||warmups;session=x.session||"A"}catch{}render();refreshAuth();
