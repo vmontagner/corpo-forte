@@ -26,7 +26,7 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 .calendar-grid .weekday{color:var(--muted);font-weight:700}
 .calendar-grid .trained{background:var(--green);color:#102018;font-weight:800}
 .calendar-grid .today{outline:1px solid var(--green)}
-.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
+.prescription{display:grid;grid-template-columns: minmax(74px,.7fr) minmax(130px,1.3fr);gap:8px;margin-top:9px}.prescription label{display:block}.prescription input{width:100%;min-width:0;background:#101815;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px;font:inherit;margin-top:5px}.series-wrap{margin-top:12px;padding:10px;background:var(--panel2);border-radius:12px}.table-scroll{overflow-x:auto}.series-table{width:100%;border-collapse:collapse;margin-top:7px;font-size:.82rem}.series-table th{text-align:left;color:var(--muted);font-weight:650;padding:5px}.series-table td{padding:4px}.series-table input,.series-table select{width:100%;min-width:64px;background:#101815;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit}.series-table button{padding:6px 10px}.series-table th:nth-child(1){min-width:108px}.series-table th:nth-child(2),.series-table th:nth-child(3){min-width:74px}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
 
 .auth-screen{min-height:100dvh;display:grid;place-items:center;padding:24px}
 .auth-panel{width:min(100%,430px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
@@ -59,7 +59,7 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 <label class="exercise"><input type="radio" name="warmup" value="Bicicleta ergométrica: 5–7 min em ritmo confortável"> Bicicleta — ritmo confortável (5–7 min)</label>
 <label class="exercise"><input type="radio" name="warmup" value="Elíptico: 5–7 min em ritmo confortável"> Elíptico — ritmo confortável (5–7 min)</label>
 <p class="tip">Depois, faça 1–3 séries leves de aproximação do primeiro exercício. O aquecimento não deve cansar. Para o joelho, escolha a opção mais confortável naquele dia.</p></div>
-<div class="card" id="exercise-list"></div>
+<div class="card tip"><strong>Séries de aproximação (não contam como séries efetivas)</strong><p>Registre-as na tabela de cada exercício, escolhendo “Aproximação”. Você pode adicionar quantas linhas precisar e informar carga e repetições. Isso permitirá revisar depois se a preparação foi adequada à carga de trabalho.</p></div><div class="card" id="exercise-list"></div>
 <div class="card"><h2>Anotações da sessão</h2><textarea id="notes" placeholder="Como foi? Cargas, esforço, desconfortos..."></textarea><div class="actions"><button class="primary" id="finish">Salvar sessão</button><button class="ghost" id="reset">Desmarcar</button></div><p class="small">Registros são salvos neste aparelho e sincronizados com sua conta quando conectado.</p></div>
 </section>
 </section>
@@ -103,6 +103,11 @@ const data={
  ]}
 };
 let session="A",checks={A:[],B:[]},loads={A:{},B:{}},notes={A:"",B:""},warmups={A:"",B:""};
+function defaultSeries(ex){const m=String(ex.dose).match(/(\\d+)\\s*[×x]\\s*([^ ]+)/i);const n=m?Math.max(1,Math.min(6,Number(m[1]))):2;const reps=m?m[2]:"8–12";return [{type:"warmup",weight:"",reps:""},...Array.from({length:n},()=>({type:"effective",weight:"",reps}))]}
+function getExerciseSeries(ex){let v=loads[session][ex.id];if(Array.isArray(v))return v;if(v&&Array.isArray(v.series))return v.series;if(v&&typeof v==="object"&&("sets" in v||"load" in v)){const n=Math.max(1,Math.min(6,Number(v.sets)||2));return [{type:"warmup",weight:"",reps:""},...Array.from({length:n},()=>({type:"effective",weight:v.load||"",reps:v.reps||"8–12"}))]}if(typeof v==="string"&&v)return [{type:"warmup",weight:"",reps:""},...Array.from({length:2},()=>({type:"effective",weight:v,reps:""}))];return defaultSeries(ex)}
+function persistSeries(exId,series){loads[session][exId]=series;save()}
+function seriesRows(exId,series){return series.map((r,i)=>`<tr><td><select data-series-type="${exId}" data-index="${i}"><option value="warmup" ${r.type==="warmup"?"selected":""}>Aproximação</option><option value="effective" ${r.type!=="warmup"?"selected":""}>Efetiva</option></select></td><td><input type="text" inputmode="decimal" data-series-weight="${exId}" data-index="${i}" value="${esc(r.weight||"")}" placeholder="kg"></td><td><input type="text" inputmode="numeric" data-series-reps="${exId}" data-index="${i}" value="${esc(r.reps||"")}" placeholder="reps"></td><td><button type="button" class="ghost" data-remove-series="${exId}" data-index="${i}" aria-label="Remover série">×</button></td></tr>`).join("")}
+
 const $=id=>document.getElementById(id);
 let calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 function history(){try{return JSON.parse(localStorage.getItem("pcf-gym-history")||localStorage.getItem("pcf-history")||"[]")}catch{return[]}}
@@ -182,9 +187,12 @@ function render(){
  document.querySelectorAll('input[name="warmup"]').forEach(el=>el.checked=el.value===(warmups[session]||""));
  const items=data[session].items,done=checks[session]||[];$("count").textContent=`${done.length}/${items.length}`;$("bar").style.width=(done.length/items.length*100)+"%";
  $("progress-label").textContent=done.length===items.length?"Sessão completa!":"Marque os exercícios concluídos.";
- $("exercise-list").innerHTML=items.map((e,i)=>`<div class="exercise"><div class="exhead"><input type="checkbox" data-check="${e.id}" ${done.includes(e.id)?"checked":""}><div class="exbody"><h3>${i+1}. ${e.name}</h3><div class="dose">${e.dose}</div><p>${e.focus}</p><p class="small">${e.how}</p><label class="small">Carga / observação<input type="text" data-load="${e.id}" value="${esc(loads[session][e.id]||"")}" placeholder="Ex.: 40 kg · 10, 9, 8 repetições"></label></div></div></div>`).join("");
+ $("exercise-list").innerHTML=items.map((e,i)=>{const series=getExerciseSeries(e);return `<div class="exercise"><div class="exhead"><input type="checkbox" data-check="${e.id}" ${done.includes(e.id)?"checked":""}><div class="exbody"><h3>${i+1}. ${e.name}</h3><div class="dose">Referência inicial: ${e.dose}</div><p>${e.focus}</p><p class="small">${e.how}</p><div class="series-wrap"><div class="row"><strong>Registro das séries</strong><span class="small">${series.filter(x=>x.type==="effective").length} efetivas</span></div><div class="table-scroll"><table class="series-table"><thead><tr><th>Tipo</th><th>Carga</th><th>Reps</th><th></th></tr></thead><tbody>${seriesRows(e.id,series)}</tbody></table></div><div class="actions"><button type="button" data-add-series="${e.id}" data-type="warmup">+ Aproximação</button><button type="button" data-add-series="${e.id}" data-type="effective">+ Série efetiva</button></div></div></div></div></div>`}).join("");
  $("exercise-list").querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",()=>{let id=el.dataset.check;checks[session]=el.checked?[...checks[session],id]:checks[session].filter(x=>x!==id);save();render()}));
- $("exercise-list").querySelectorAll("[data-load]").forEach(el=>el.addEventListener("input",()=>{loads[session][el.dataset.load]=el.value;save()}));save();
+ $("exercise-list").querySelectorAll("[data-add-series]").forEach(el=>el.addEventListener("click",()=>{const ex=data[session].items.find(x=>x.id===el.dataset.addSeries),series=getExerciseSeries(ex);series.push({type:el.dataset.type,weight:"",reps:""});persistSeries(ex.id,series);render()}));
+ $("exercise-list").querySelectorAll("[data-remove-series]").forEach(el=>el.addEventListener("click",()=>{const ex=data[session].items.find(x=>x.id===el.dataset.removeSeries),series=getExerciseSeries(ex);series.splice(Number(el.dataset.index),1);persistSeries(ex.id,series);render()}));
+ $("exercise-list").querySelectorAll("[data-series-type],[data-series-weight],[data-series-reps]").forEach(el=>el.addEventListener(el.dataset.seriesType!==undefined?"change":"input",()=>{const id=el.dataset.seriesType||el.dataset.seriesWeight||el.dataset.seriesReps;const i=Number(el.dataset.index),ex=data[session].items.find(x=>x.id===id),series=getExerciseSeries(ex);if(el.dataset.seriesType!==undefined)series[i].type=el.value;if(el.dataset.seriesWeight!==undefined)series[i].weight=el.value;if(el.dataset.seriesReps!==undefined)series[i].reps=el.value;persistSeries(id,series)}));
+save();
 }
 $("prev-month").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);renderCalendar()});
 $("next-month").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);renderCalendar()});
