@@ -1,19 +1,5 @@
-PROJETO CORPO FORTE — PWA
-
-CONTEÚDO
-- index.html: aplicativo
-- manifest.webmanifest: configuração de instalação
-- sw.js: cache offline
-- icon.svg: ícone
-
-COMO INSTALAR NO ANDROID
-1. Publique o conteúdo desta pasta em um serviço de hospedagem estática com HTTPS
-   (por exemplo, GitHub Pages, Netlify ou Cloudflare Pages).
-2. Abra o endereço publicado no Chrome do Android.
-3. Abra o menu ⋮ e escolha "Instalar app" ou "Adicionar à tela inicial".
-4. Depois da primeira abertura, o app pode funcionar offline.
-
-Os registros ficam no armazenamento local do navegador/aplicativo. Exporte o backup
-periodicamente pelo próprio app. Limpar os dados do navegador pode apagar os registros.
-
-Este pacote é o código-fonte do PWA, não um APK.
+PROJETO CORPO FORTE — VERSÃO ACADEMIA
+Substitui a versão de treino em casa.
+Envie os quatro arquivos para a raiz do repositório GitHub Pages, sobrescrevendo os existentes.
+Depois aguarde a publicação e atualize o site no Chrome. Se o app instalado mantiver a versão antiga, feche-o completamente e abra novamente; o service worker usa cache novo nesta versão.
+Os dados desta versão usam chaves locais próprias. Exporte o histórico antigo antes de trocar se quiser preservá-lo; o formato antigo pode não ser compatível com a versão academia.

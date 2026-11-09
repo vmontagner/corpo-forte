@@ -1,135 +1,88 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#14251f">
-<meta name="description" content="Treino minimalista de força, mobilidade e autonomia.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>Projeto Corpo Forte</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14251f"><meta name="description" content="Treino de academia baseado nas recomendações ACSM 2026.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Projeto Corpo Forte · Academia</title>
 <style>
-:root{color-scheme:dark;--bg:#101815;--panel:#1a2621;--panel2:#22332b;--line:#34483d;--txt:#f2f6f1;--muted:#b2c1b7;--green:#9ce2b4;--accent:#b5efc8;--danger:#ffb4a9}
+:root{color-scheme:dark;--bg:#101815;--panel:#1a2621;--panel2:#22332b;--line:#34483d;--txt:#f2f6f1;--muted:#b2c1b7;--green:#9ce2b4;--accent:#b5efc8}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
-header{padding:22px 18px 14px;background:linear-gradient(140deg,#203b2e,#14251f);position:sticky;top:0;z-index:3;border-bottom:1px solid var(--line)}
-h1{font-size:1.45rem;margin:0 0 4px}header p{margin:0;color:var(--muted);font-size:.9rem}
-main{max-width:720px;margin:auto;padding:16px 14px 40px}
-.tabs{display:flex;gap:8px;margin:8px 0 14px}.tab,button{border:1px solid var(--line);background:var(--panel2);color:var(--txt);padding:11px 14px;border-radius:12px;font-weight:650;font-size:.95rem}
-.tab{flex:1}.tab.active{background:var(--green);color:#102018;border-color:var(--green)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+header{padding:20px 18px 14px;background:linear-gradient(140deg,#203b2e,#14251f);position:sticky;top:0;z-index:3;border-bottom:1px solid var(--line)}
+h1{font-size:1.35rem;margin:0 0 4px}header p{margin:0;color:var(--muted);font-size:.9rem}main{max-width:760px;margin:auto;padding:14px 13px 40px}
+.tabs{display:flex;gap:7px;margin:8px 0 14px}.tab,button{border:1px solid var(--line);background:var(--panel2);color:var(--txt);padding:10px 12px;border-radius:12px;font-weight:650;font-size:.92rem}.tab{flex:1}.tab.active{background:var(--green);color:#102018;border-color:var(--green)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px;margin:11px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .small{color:var(--muted);font-size:.84rem}.tag{font-size:.72rem;color:#102018;background:var(--green);padding:4px 8px;border-radius:30px;font-weight:750}
-h2{font-size:1.1rem;margin:0 0 8px}h3{font-size:1rem;margin:0}
-.progress{height:9px;background:#34483d;border-radius:20px;overflow:hidden;margin:9px 0}.bar{height:100%;background:var(--green);width:0;transition:width .2s}
-.exercise{padding:14px 0;border-top:1px solid var(--line)}.exercise:first-child{border-top:0}
-.exhead{display:flex;gap:10px;align-items:flex-start}.exhead input{width:22px;height:22px;accent-color:#9ce2b4;margin-top:2px}
-.exbody{flex:1}.dose{font-size:.82rem;color:var(--green);margin-top:2px}
-p{margin:7px 0}.home{font-size:.86rem;color:var(--muted);background:var(--panel2);padding:9px;border-radius:10px;margin-top:8px}
-input[type=text],input[type=number],textarea{width:100%;background:#101815;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;margin-top:7px}
-textarea{min-height:72px;resize:vertical}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}
-button.primary{background:var(--green);color:#102018;border-color:var(--green)}button.ghost{background:transparent}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--panel2);padding:12px;border-radius:12px}.stat strong{display:block;font-size:1.35rem}
-.history-item{border-top:1px solid var(--line);padding:10px 0;font-size:.9rem}
-footer{text-align:center;color:var(--muted);font-size:.75rem;padding:20px}
-.hidden{display:none!important}
-</style>
-</head>
-<body>
-<header><h1>Projeto Corpo Forte</h1><p>Força, mobilidade e autonomia — sem complicar.</p></header>
+h2{font-size:1.08rem;margin:0 0 8px}h3{font-size:1rem;margin:0}.progress{height:8px;background:#34483d;border-radius:20px;overflow:hidden;margin:9px 0}.bar{height:100%;background:var(--green);width:0}
+.exercise{padding:13px 0;border-top:1px solid var(--line)}.exercise:first-child{border-top:0}.exhead{display:flex;gap:10px;align-items:flex-start}.exhead input{width:21px;height:21px;accent-color:#9ce2b4;margin-top:2px}.exbody{flex:1}.dose{font-size:.83rem;color:var(--green);margin-top:3px}
+p{margin:7px 0}.tip{font-size:.85rem;color:var(--muted);background:var(--panel2);padding:9px;border-radius:10px;margin-top:8px}
+input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;margin-top:7px}textarea{min-height:68px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}button.primary{background:var(--green);color:#102018;border-color:var(--green)}button.ghost{background:transparent}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--panel2);padding:12px;border-radius:12px}.stat strong{display:block;font-size:1.3rem}
+.history-item{border-top:1px solid var(--line);padding:10px 0;font-size:.9rem}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
+</style></head><body>
+<header><h1>Projeto Corpo Forte</h1><p>Treino de academia · força, função e autonomia</p></header>
 <main>
-<section class="card">
- <div class="row"><div><div class="small">META SEMANAL</div><strong>2 sessões de força</strong></div><span class="tag">A + B</span></div>
- <p class="small">Comece leve. Nas primeiras semanas, 2 séries por exercício e 3 repetições “na reserva”.</p>
-</section>
-<div class="tabs">
- <button class="tab active" data-session="A">Treino A</button>
- <button class="tab" data-session="B">Treino B</button>
- <button class="tab" data-session="history">Histórico</button>
-</div>
+<section class="card"><div class="row"><div><div class="small">ROTINA SUGERIDA</div><strong>3 sessões de corpo inteiro</strong></div><span class="tag">A / B</span></div>
+<p class="small">Exemplo: seg A · qua B · sex A; na semana seguinte, B · A · B. Se só conseguir 2 dias, faça A e B.</p></section>
+<div class="tabs"><button class="tab active" data-session="A">Treino A</button><button class="tab" data-session="B">Treino B</button><button class="tab" data-session="history">Histórico</button></div>
 <section id="workout">
- <div class="card">
-  <div class="row"><h2 id="session-title">Treino A · Base geral</h2><strong id="count">0/5</strong></div>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-  <div class="small" id="progress-label">Marque os exercícios concluídos.</div>
- </div>
- <div class="card" id="exercise-list"></div>
- <div class="card">
-  <h2>Anotações da sessão</h2>
-  <textarea id="notes" placeholder="Como foi o treino? Alguma adaptação, desconforto ou observação?"></textarea>
-  <div class="actions"><button class="primary" id="finish">Salvar sessão</button><button class="ghost" id="reset">Desmarcar tudo</button></div>
-  <p class="small">Os registros ficam salvos neste aparelho e neste navegador. Use “Exportar dados” para fazer uma cópia de segurança.</p>
- </div>
+<div class="card"><div class="row"><h2 id="session-title">Treino A · Base de força</h2><strong id="count">0/6</strong></div><div class="progress"><div class="bar" id="bar"></div></div><div class="small" id="progress-label">Marque os exercícios concluídos.</div></div>
+<div class="card" id="exercise-list"></div>
+<div class="card"><h2>Anotações da sessão</h2><textarea id="notes" placeholder="Como foi? Cargas, esforço, desconfortos..."></textarea><div class="actions"><button class="primary" id="finish">Salvar sessão</button><button class="ghost" id="reset">Desmarcar</button></div><p class="small">Registros ficam neste aparelho e navegador. Exporte um backup periodicamente.</p></div>
 </section>
-<section id="history" class="hidden">
- <div class="card">
-  <h2>Seu histórico</h2><div class="stats"><div class="stat"><span class="small">Sessões salvas</span><strong id="total">0</strong></div><div class="stat"><span class="small">Último treino</span><strong id="last" style="font-size:1rem">—</strong></div></div>
-  <div class="actions"><button class="primary" id="export">Exportar dados</button><button class="ghost" id="import-btn">Importar backup</button><input class="hidden" type="file" id="import-file" accept="application/json"></div>
-  <div id="history-list"></div>
- </div>
-</section>
-<section class="card">
- <h2>Princípios do programa</h2>
- <p class="small">Agachar · dobrar o quadril · empurrar · puxar · estabilizar o core · carregar peso.</p>
- <p class="small">Progrida aumentando repetições, depois a carga da mochila ou a dificuldade da variação. Não aumente tudo ao mesmo tempo.</p>
- <p class="small">Yoga do Down Dog complementa mobilidade e equilíbrio; mantenha as sessões de força para desenvolver força progressiva.</p>
-</section>
-<footer>Funciona offline depois da primeira abertura, quando instalado e servido por HTTPS.</footer>
+<section id="history" class="hidden"><div class="card"><h2>Histórico</h2><div class="stats"><div class="stat"><span class="small">Sessões salvas</span><strong id="total">0</strong></div><div class="stat"><span class="small">Último treino</span><strong id="last" style="font-size:1rem">—</strong></div></div><div class="actions"><button class="primary" id="export">Exportar backup</button><button class="ghost" id="import-btn">Importar backup</button><input class="hidden" type="file" id="import-file" accept="application/json"></div><div id="history-list"></div></div></section>
+<section class="card"><h2>Como usar o programa</h2>
+<p><b>Esforço:</b> termine a maioria das séries sentindo que ainda conseguiria fazer 2–3 repetições com técnica boa (RIR 2–3). Não precisa falhar.</p>
+<p><b>Progressão:</b> quando fizer o máximo da faixa em todas as séries com boa técnica, aumente a menor carga disponível e volte ao início da faixa.</p>
+<p><b>Descanso:</b> em geral 2–3 min nos exercícios principais e 1–2 min nos acessórios. Faça 5–8 min de aquecimento geral e séries leves de aproximação antes do primeiro exercício pesado.</p>
+<p><b>Joelho:</b> use amplitude confortável e controlada. Aumente carga e amplitude gradualmente; reduza ou interrompa se houver dor crescente, inchaço, falseio ou piora no dia seguinte. Exercícios unilaterais podem começar com apoio.</p>
+<p class="small">A ACSM 2026 destaca treino progressivo, esforço alto, grandes grupos musculares pelo menos 2x/semana; 2–3 séries por sessão para força e cerca de 10 séries semanais por músculo como referência para maximizar hipertrofia. Não é necessário treinar até a falha nem usar técnicas avançadas.</p></section>
+<footer>Baseado no Position Stand da ACSM de 2026. Ajuste individual com profissional de educação física/fisioterapeuta.</footer>
 </main>
 <script>
 const data={
- A:{title:"Treino A · Base geral",items:[
- {id:"squat",name:"Agachamento",dose:"2–3 × 8–12",focus:"Quadríceps, glúteos e tronco.",how:"Sente e levante de uma cadeira firme; progrida para agachamento livre ou mochila junto ao peito.",home:"Sentar e levantar da cadeira ou agachamento livre."},
- {id:"push",name:"Flexão inclinada",dose:"2–3 × 8–12",focus:"Peitoral, tríceps e ombros.",how:"Mãos na parede ou bancada muito firme. Corpo alinhado; aproxime o peito e empurre.",home:"Flexão na parede (mais fácil) ou bancada firme."},
- {id:"row",name:"Remada",dose:"2–3 × 10–15",focus:"Costas, bíceps e controle das escápulas.",how:"Apoie uma mão em cadeira firme e puxe uma mochila bem fechada com a outra, sem girar o tronco nem encolher o ombro.",home:"Remada unilateral com mochila."},
- {id:"hinge",name:"Terra romeno",dose:"2–3 × 10–12",focus:"Glúteos e posteriores de coxa.",how:"Segure mochila junto ao corpo. Leve o quadril para trás, mantendo coluna neutra e joelhos levemente flexionados.",home:"Terra romeno com mochila ou sem carga para aprender o movimento."},
- {id:"deadbug",name:"Dead bug",dose:"2 × 6–10 por lado",focus:"Estabilidade do core.",how:"Deitado, mova braço e perna opostos sem perder o controle do tronco ou arquear a lombar.",home:"Mesmo exercício no chão."}
+ A:{title:"Treino A · Base de força",items:[
+ {id:"legpress",name:"Leg press",dose:"3 × 6–10",focus:"Quadríceps e glúteos.",how:"Pés firmes; desça até a amplitude em que mantém a pelve apoiada e o joelho confortável. Controle a descida."},
+ {id:"chest",name:"Supino máquina",dose:"3 × 6–10",focus:"Peitoral, tríceps e ombros.",how:"Ajuste o banco para as manoplas ficarem na linha média do peito. Não force amplitude dolorosa."},
+ {id:"row",name:"Remada baixa sentada",dose:"3 × 8–12",focus:"Costas e bíceps.",how:"Puxe sem balançar o tronco e sem encolher os ombros. Termine com controle das escápulas."},
+ {id:"curl",name:"Mesa flexora",dose:"2 × 10–15",focus:"Posteriores de coxa; complemento para joelho.",how:"Ajuste o eixo da máquina ao joelho e faça o movimento sem trancos."},
+ {id:"calf",name:"Panturrilha na máquina",dose:"2 × 10–15",focus:"Panturrilhas e capacidade de caminhar/subir escadas.",how:"Use amplitude confortável, pausa breve no alongamento e subida controlada."},
+ {id:"pallof",name:"Pallof press no cabo",dose:"2 × 10–12 por lado",focus:"Core anti-rotação.",how:"Fique de lado para o cabo, estenda os braços e resista à rotação do tronco."}
  ]},
- B:{title:"Treino B · Força funcional",items:[
- {id:"step",name:"Step-up ou afundo assistido",dose:"2–3 × 6–10 por perna",focus:"Força unilateral, equilíbrio e pernas.",how:"Suba em degrau baixo, firme e antiderrapante, usando apoio se necessário. Sem degrau seguro, faça sentar-levantar extra.",home:"Subida em degrau firme ou afundo curto assistido."},
- {id:"push",name:"Flexão inclinada",dose:"2–3 × 8–12",focus:"Peitoral, tríceps e ombros.",how:"Mãos na parede ou bancada firme. Corpo alinhado; aproxime o peito e empurre.",home:"Flexão na parede ou bancada."},
- {id:"row",name:"Remada unilateral",dose:"2–3 × 10–12 por lado",focus:"Costas e controle escapular.",how:"Apoie a mão livre e puxe a mochila com controle, sem rodar o tronco.",home:"Remada unilateral com mochila."},
- {id:"bridge",name:"Ponte de glúteos",dose:"2–3 × 10–15",focus:"Glúteos e extensão do quadril.",how:"Deitado, pés no chão; eleve o quadril sem hiperestender a lombar. Progrida para unilateral se confortável.",home:"Ponte no chão."},
- {id:"carry",name:"Suitcase carry",dose:"3 × 20–40 s por lado",focus:"Pegada, core e estabilidade lateral.",how:"Caminhe segurando uma mochila ou sacola firme em uma mão. Tronco alto, sem inclinar para o lado; troque de mão.",home:"Caminhada segurando mochila de um lado."}
+ B:{title:"Treino B · Força e estabilidade",items:[
+ {id:"squat",name:"Agachamento no Smith até banco (ou hack squat)",dose:"3 × 8–10",focus:"Quadríceps, glúteos e padrão de agachar.",how:"Escolha a variação mais confortável. Use banco como referência de profundidade no início; progrida a amplitude sem perder controle."},
+ {id:"pulldown",name:"Puxada alta (pulldown)",dose:"3 × 8–12",focus:"Dorsais e bíceps.",how:"Puxe à frente do corpo em direção à parte alta do peito. Evite puxar atrás da nuca."},
+ {id:"rdl",name:"Terra romeno com halteres",dose:"3 × 8–10",focus:"Glúteos e posteriores de coxa.",how:"Leve o quadril para trás, halteres próximos às pernas e coluna neutra. Pare quando perder a posição ou sentir limite dos posteriores."},
+ {id:"incline",name:"Supino inclinado na máquina ou halteres",dose:"2 × 8–12",focus:"Peitoral superior, tríceps e ombros.",how:"Use inclinação moderada e amplitude sem desconforto no ombro."},
+ {id:"lateral",name:"Elevação lateral na máquina ou cabos",dose:"2 × 12–15",focus:"Deltoide lateral.",how:"Eleve até aproximadamente a linha dos ombros, sem encolher o trapézio."},
+ {id:"deadbug",name:"Dead bug",dose:"2 × 8–10 por lado",focus:"Estabilidade do core.",how:"Movimente braço e perna opostos sem arquear a lombar."}
  ]}
 };
-let session="A", checks={A:[],B:[]}, loads={A:{},B:{}}, notes={A:"",B:""};
+let session="A",checks={A:[],B:[]},loads={A:{},B:{}},notes={A:"",B:""};
 const $=id=>document.getElementById(id);
-function getHistory(){try{return JSON.parse(localStorage.getItem("pcf-history")||"[]")}catch{return[]}}
-function saveState(){localStorage.setItem("pcf-draft",JSON.stringify({checks,loads,notes,session}))}
-function loadState(){try{const x=JSON.parse(localStorage.getItem("pcf-draft")||"{}");checks=x.checks||checks;loads=x.loads||loads;notes=x.notes||notes;session=x.session||"A"}catch{}}
+function history(){try{return JSON.parse(localStorage.getItem("pcf-gym-history")||localStorage.getItem("pcf-history")||"[]")}catch{return[]}}
+function save(){localStorage.setItem("pcf-gym-draft",JSON.stringify({checks,loads,notes,session}))}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){
  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.session===session));
  $("workout").classList.toggle("hidden",session==="history");$("history").classList.toggle("hidden",session!=="history");
  if(session==="history"){renderHistory();return}
- $("session-title").textContent=data[session].title;
- $("notes").value=notes[session]||"";
- const items=data[session].items, done=checks[session]||[];
- $("count").textContent=`${done.length}/${items.length}`;$("bar").style.width=(done.length/items.length*100)+"%";
- $("progress-label").textContent=done.length===items.length?"Sessão completa! Muito bem.":"Marque os exercícios concluídos.";
- $("exercise-list").innerHTML=items.map((e,i)=>`<div class="exercise"><div class="exhead"><input type="checkbox" data-check="${e.id}" ${done.includes(e.id)?"checked":""} aria-label="Concluir ${e.name}"><div class="exbody"><h3>${i+1}. ${e.name}</h3><div class="dose">${e.dose}</div><p>${e.focus}</p><p class="small">${e.how}</p><div class="home"><b>Alternativa:</b> ${e.home}</div><label class="small">Carga / observação<input type="text" data-load="${e.id}" value="${escapeHtml(loads[session][e.id]||"")}" placeholder="Ex.: mochila 6 kg, 10 repetições"></label></div></div></div>`).join("");
- $("exercise-list").querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",()=>{let id=el.dataset.check;checks[session]=el.checked?[...checks[session],id]:checks[session].filter(x=>x!==id);saveState();render()}));
- $("exercise-list").querySelectorAll("[data-load]").forEach(el=>el.addEventListener("input",()=>{loads[session][el.dataset.load]=el.value;saveState()}));
- saveState();
+ $("session-title").textContent=data[session].title;$("notes").value=notes[session]||"";
+ const items=data[session].items,done=checks[session]||[];$("count").textContent=`${done.length}/${items.length}`;$("bar").style.width=(done.length/items.length*100)+"%";
+ $("progress-label").textContent=done.length===items.length?"Sessão completa!":"Marque os exercícios concluídos.";
+ $("exercise-list").innerHTML=items.map((e,i)=>`<div class="exercise"><div class="exhead"><input type="checkbox" data-check="${e.id}" ${done.includes(e.id)?"checked":""}><div class="exbody"><h3>${i+1}. ${e.name}</h3><div class="dose">${e.dose}</div><p>${e.focus}</p><p class="small">${e.how}</p><label class="small">Carga / observação<input type="text" data-load="${e.id}" value="${esc(loads[session][e.id]||"")}" placeholder="Ex.: 40 kg · 10, 9, 8 repetições"></label></div></div></div>`).join("");
+ $("exercise-list").querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",()=>{let id=el.dataset.check;checks[session]=el.checked?[...checks[session],id]:checks[session].filter(x=>x!==id);save();render()}));
+ $("exercise-list").querySelectorAll("[data-load]").forEach(el=>el.addEventListener("input",()=>{loads[session][el.dataset.load]=el.value;save()}));save();
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>{notes[session]=$("notes").value;session=el.dataset.session;saveState();render()}));
-$("notes").addEventListener("input",()=>{notes[session]=$("notes").value;saveState()});
-$("reset").addEventListener("click",()=>{if(confirm("Desmarcar todos os exercícios desta sessão?")){checks[session]=[];render()}});
-$("finish").addEventListener("click",()=>{
- const item={date:new Date().toISOString(),session,done:[...checks[session]],loads:{...loads[session]},notes:$("notes").value};
- if(!item.done.length&&!item.notes.trim()){alert("Marque ao menos um exercício ou escreva uma anotação antes de salvar.");return}
- const h=getHistory();h.unshift(item);localStorage.setItem("pcf-history",JSON.stringify(h));
- checks[session]=[];notes[session]="";saveState();alert("Sessão salva neste aparelho.");render();
-});
-function renderHistory(){
- const h=getHistory();$("total").textContent=h.length;$("last").textContent=h.length?new Date(h[0].date).toLocaleDateString("pt-BR"):"—";
- $("history-list").innerHTML=h.length?h.map(x=>`<div class="history-item"><b>Treino ${x.session}</b> · ${new Date(x.date).toLocaleString("pt-BR")}<br><span class="small">${x.done.length} exercícios marcados</span>${x.notes?`<p>${escapeHtml(x.notes)}</p>`:""}</div>`).join(""):"<p class='small'>Nenhuma sessão salva ainda. Seu histórico aparecerá aqui.</p>";
-}
-$("export").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({history:getHistory(),draft:{checks,loads,notes,session}},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="projeto-corpo-forte-backup.json";a.click();URL.revokeObjectURL(a.href)});
+document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>{notes[session]=$("notes").value;session=el.dataset.session;save();render()}));
+$("notes").addEventListener("input",()=>{notes[session]=$("notes").value;save()});
+$("reset").addEventListener("click",()=>{if(confirm("Desmarcar os exercícios desta sessão?")){checks[session]=[];render()}});
+$("finish").addEventListener("click",()=>{let item={date:new Date().toISOString(),session,done:[...checks[session]],loads:{...loads[session]},notes:$("notes").value};if(!item.done.length&&!item.notes.trim()){alert("Marque algum exercício ou escreva uma anotação.");return}let h=history();h.unshift(item);localStorage.setItem("pcf-gym-history",JSON.stringify(h));checks[session]=[];notes[session]="";save();alert("Sessão salva.");render()});
+function renderHistory(){let h=history();$("total").textContent=h.length;$("last").textContent=h.length?new Date(h[0].date).toLocaleDateString("pt-BR"):"—";$("history-list").innerHTML=h.length?h.map(x=>`<div class="history-item"><b>Treino ${x.session}</b> · ${new Date(x.date).toLocaleString("pt-BR")}<br><span class="small">${x.done.length} exercícios marcados</span>${x.notes?`<p>${esc(x.notes)}</p>`:""}</div>`).join(""):"<p class='small'>Nenhuma sessão salva ainda.</p>"}
+$("export").addEventListener("click",()=>{let b=new Blob([JSON.stringify({history:history(),draft:{checks,loads,notes,session}},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="corpo-forte-academia-backup.json";a.click();URL.revokeObjectURL(a.href)});
 $("import-btn").addEventListener("click",()=>$("import-file").click());
-$("import-file").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(Array.isArray(x.history))localStorage.setItem("pcf-history",JSON.stringify(x.history));if(x.draft){checks=x.draft.checks||checks;loads=x.draft.loads||loads;notes=x.draft.notes||notes;session=x.draft.session||session;saveState()}alert("Backup importado.");render()}catch{alert("Não foi possível ler esse backup.")}});
-loadState();render();
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-</script>
-</body></html>
+$("import-file").addEventListener("change",async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text());if(Array.isArray(x.history))localStorage.setItem("pcf-gym-history",JSON.stringify(x.history));if(x.draft){checks=x.draft.checks||checks;loads=x.draft.loads||loads;notes=x.draft.notes||notes;session=x.draft.session||session;save()}alert("Backup importado.");render()}catch{alert("Backup inválido.")}});
+try{let x=JSON.parse(localStorage.getItem("pcf-gym-draft")||"{}");checks=x.checks||checks;loads=x.loads||loads;notes=x.notes||notes;session=x.session||"A"}catch{}render();
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script></body></html>
