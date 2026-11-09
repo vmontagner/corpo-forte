@@ -1,0 +1,22 @@
+PROJETO CORPO FORTE v5 — SINCRONIZAÇÃO SUPABASE
+
+IMPORTANTE: o app ainda funciona localmente até você configurar o Supabase.
+Não publique a chave service_role. No frontend use somente a chave anon/public.
+
+PASSOS:
+1. Crie projeto em https://supabase.com/
+2. No painel, abra SQL Editor > New query, cole o conteúdo de supabase-setup.sql e execute.
+3. Em Project Settings > API (ou Connect), copie Project URL e anon/public key.
+4. Abra index.html e substitua:
+   SUPABASE_URL="COLE_AQUI_A_URL_DO_PROJETO"
+   SUPABASE_ANON_KEY="COLE_AQUI_A_CHAVE_ANON_PUBLICA"
+5. Salve e envie index.html e sw.js para a raiz do GitHub Pages.
+6. No Supabase Authentication > URL Configuration, adicione seu endereço GitHub Pages em Site URL e Redirect URLs.
+7. No app, crie conta com e-mail/senha. Confirme o e-mail se o Supabase solicitar. Entre e use Sincronizar agora.
+
+SEGURANÇA:
+- RLS restringe os registros ao usuário autenticado.
+- Nunca compartilhe a service_role key.
+- A chave anon/public é apropriada para frontend quando RLS está ativo.
+- Histórico local não é apagado. A primeira sincronização combina registros locais e remotos por identificador.
+- Recomenda-se exportar backup JSON antes de ativar a nuvem.
