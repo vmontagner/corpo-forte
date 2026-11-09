@@ -19,15 +19,28 @@ p{margin:7px 0}.tip{font-size:.85rem;color:var(--muted);background:var(--panel2)
 input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;margin-top:7px}textarea{min-height:68px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}button.primary{background:var(--green);color:#102018;border-color:var(--green)}button.ghost{background:transparent}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--panel2);padding:12px;border-radius:12px}.stat strong{display:block;font-size:1.3rem}
-.history-item{border-top:1px solid var(--line);padding:10px 0;font-size:.9rem}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
+.history-item{border-top:1px solid var(--line);padding:10px 0;font-size:.9rem}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px;text-align:center}
+.calendar-grid div{padding:8px 0;border-radius:9px;font-size:.82rem}
+.calendar-grid .weekday{color:var(--muted);font-weight:700}
+.calendar-grid .trained{background:var(--green);color:#102018;font-weight:800}
+.calendar-grid .today{outline:1px solid var(--green)}
+.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
 </style></head><body>
 <header><div class="row"><div><h1>Projeto Corpo Forte</h1><p>Treino de academia · força, função e autonomia</p></div><button class="ghost" id="check-update" style="font-size:.78rem;padding:8px 9px">↻ Atualizar</button></div><p id="update-status" class="small" aria-live="polite" style="margin-top:7px"></p></header>
 <main>
 <section class="card"><div class="row"><div><div class="small">ROTINA SUGERIDA</div><strong>3 sessões de corpo inteiro</strong></div><span class="tag">A / B</span></div>
 <p class="small">Exemplo: seg A · qua B · sex A; na semana seguinte, B · A · B. Se só conseguir 2 dias, faça A e B.</p></section>
+<section class="card" id="phase-card"><div class="row"><h2>Seu estágio de adaptação</h2><span class="tag" id="phase-tag">Fase 1</span></div><strong id="phase-name">Readaptação</strong><p id="phase-desc" class="small"></p><div class="progress"><div class="bar" id="phase-bar"></div></div><p id="phase-next" class="small"></p><p class="tip">A etapa é uma referência pelo tempo desde seu primeiro treino registrado. Só avance se estiver recuperando bem, sem dor articular crescente ou fadiga persistente.</p></section>
+<section class="card" id="calendar-card"><div class="row"><h2>Calendário de treinos</h2><div class="actions" style="margin:0"><button class="ghost" id="prev-month">‹</button><button class="ghost" id="next-month">›</button></div></div><div class="row"><strong id="calendar-title"></strong><span class="small">● treino registrado</span></div><div id="calendar-grid" class="calendar-grid"></div><p class="small">Dias marcados correspondem às sessões salvas no histórico.</p></section>
 <div class="tabs"><button class="tab active" data-session="A">Treino A</button><button class="tab" data-session="B">Treino B</button><button class="tab" data-session="history">Histórico</button></div>
 <section id="workout">
 <div class="card"><div class="row"><h2 id="session-title">Treino A · Base de força</h2><strong id="count">0/6</strong></div><div class="progress"><div class="bar" id="bar"></div></div><div class="small" id="progress-label">Marque os exercícios concluídos.</div></div>
+<div class="card"><h2>Aquecimento · escolha uma opção</h2><p class="small">Faça 5–8 minutos no total. Selecione o que realizou nesta sessão.</p>
+<label class="exercise"><input type="radio" name="warmup" value="Esteira: caminhada leve a moderada por 5–7 min"> Esteira — caminhada leve a moderada (5–7 min)</label>
+<label class="exercise"><input type="radio" name="warmup" value="Bicicleta ergométrica: 5–7 min em ritmo confortável"> Bicicleta — ritmo confortável (5–7 min)</label>
+<label class="exercise"><input type="radio" name="warmup" value="Elíptico: 5–7 min em ritmo confortável"> Elíptico — ritmo confortável (5–7 min)</label>
+<p class="tip">Depois, faça 1–3 séries leves de aproximação do primeiro exercício. O aquecimento não deve cansar. Para o joelho, escolha a opção mais confortável naquele dia.</p></div>
 <div class="card" id="exercise-list"></div>
 <div class="card"><h2>Anotações da sessão</h2><textarea id="notes" placeholder="Como foi? Cargas, esforço, desconfortos..."></textarea><div class="actions"><button class="primary" id="finish">Salvar sessão</button><button class="ghost" id="reset">Desmarcar</button></div><p class="small">Registros ficam neste aparelho e navegador. Exporte um backup periodicamente.</p></div>
 </section>
@@ -43,47 +56,73 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 <script>
 const data={
  A:{title:"Treino A · Base de força",items:[
- {id:"legpress",name:"Leg press",dose:"3 × 6–10",focus:"Quadríceps e glúteos.",how:"Pés firmes; desça até a amplitude em que mantém a pelve apoiada e o joelho confortável. Controle a descida."},
- {id:"chest",name:"Supino máquina",dose:"3 × 6–10",focus:"Peitoral, tríceps e ombros.",how:"Ajuste o banco para as manoplas ficarem na linha média do peito. Não force amplitude dolorosa."},
- {id:"row",name:"Remada baixa sentada",dose:"3 × 8–12",focus:"Costas e bíceps.",how:"Puxe sem balançar o tronco e sem encolher os ombros. Termine com controle das escápulas."},
+ {id:"legpress",name:"Leg press",dose:"2 × 8–10",focus:"Quadríceps e glúteos.",how:"Pés firmes; desça até a amplitude em que mantém a pelve apoiada e o joelho confortável. Controle a descida."},
+ {id:"chest",name:"Supino máquina",dose:"2 × 8–10",focus:"Peitoral, tríceps e ombros.",how:"Ajuste o banco para as manoplas ficarem na linha média do peito. Não force amplitude dolorosa."},
+ {id:"row",name:"Remada baixa sentada",dose:"2 × 8–12",focus:"Costas e bíceps.",how:"Puxe sem balançar o tronco e sem encolher os ombros. Termine com controle das escápulas."},
  {id:"curl",name:"Mesa flexora",dose:"2 × 10–15",focus:"Posteriores de coxa; complemento para joelho.",how:"Ajuste o eixo da máquina ao joelho e faça o movimento sem trancos."},
  {id:"calf",name:"Panturrilha na máquina",dose:"2 × 10–15",focus:"Panturrilhas e capacidade de caminhar/subir escadas.",how:"Use amplitude confortável, pausa breve no alongamento e subida controlada."},
  {id:"pallof",name:"Pallof press no cabo",dose:"2 × 10–12 por lado",focus:"Core anti-rotação.",how:"Fique de lado para o cabo, estenda os braços e resista à rotação do tronco."}
  ]},
  B:{title:"Treino B · Força e estabilidade",items:[
- {id:"squat",name:"Agachamento no Smith até banco (ou hack squat)",dose:"3 × 8–10",focus:"Quadríceps, glúteos e padrão de agachar.",how:"Escolha a variação mais confortável. Use banco como referência de profundidade no início; progrida a amplitude sem perder controle."},
- {id:"pulldown",name:"Puxada alta (pulldown)",dose:"3 × 8–12",focus:"Dorsais e bíceps.",how:"Puxe à frente do corpo em direção à parte alta do peito. Evite puxar atrás da nuca."},
- {id:"rdl",name:"Terra romeno com halteres",dose:"3 × 8–10",focus:"Glúteos e posteriores de coxa.",how:"Leve o quadril para trás, halteres próximos às pernas e coluna neutra. Pare quando perder a posição ou sentir limite dos posteriores."},
+ {id:"squat",name:"Agachamento no Smith até banco (ou hack squat)",dose:"2 × 8–10",focus:"Quadríceps, glúteos e padrão de agachar.",how:"Escolha a variação mais confortável. Use banco como referência de profundidade no início; progrida a amplitude sem perder controle."},
+ {id:"pulldown",name:"Puxada alta (pulldown)",dose:"2 × 8–12",focus:"Dorsais e bíceps.",how:"Puxe à frente do corpo em direção à parte alta do peito. Evite puxar atrás da nuca."},
+ {id:"rdl",name:"Terra romeno com halteres",dose:"2 × 8–10",focus:"Glúteos e posteriores de coxa.",how:"Leve o quadril para trás, halteres próximos às pernas e coluna neutra. Pare quando perder a posição ou sentir limite dos posteriores."},
  {id:"incline",name:"Supino inclinado na máquina ou halteres",dose:"2 × 8–12",focus:"Peitoral superior, tríceps e ombros.",how:"Use inclinação moderada e amplitude sem desconforto no ombro."},
  {id:"lateral",name:"Elevação lateral na máquina ou cabos",dose:"2 × 12–15",focus:"Deltoide lateral.",how:"Eleve até aproximadamente a linha dos ombros, sem encolher o trapézio."},
  {id:"deadbug",name:"Dead bug",dose:"2 × 8–10 por lado",focus:"Estabilidade do core.",how:"Movimente braço e perna opostos sem arquear a lombar."}
  ]}
 };
-let session="A",checks={A:[],B:[]},loads={A:{},B:{}},notes={A:"",B:""};
+let session="A",checks={A:[],B:[]},loads={A:{},B:{}},notes={A:"",B:""},warmups={A:"",B:""};
 const $=id=>document.getElementById(id);
+let calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 function history(){try{return JSON.parse(localStorage.getItem("pcf-gym-history")||localStorage.getItem("pcf-history")||"[]")}catch{return[]}}
-function save(){localStorage.setItem("pcf-gym-draft",JSON.stringify({checks,loads,notes,session}))}
+function save(){localStorage.setItem("pcf-gym-draft",JSON.stringify({checks,loads,notes,warmups,session}))}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderCalendar(){
+ const h=history(),trained=new Set(h.map(x=>{const d=new Date(x.date);return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`})); 
+ const y=calendarMonth.getFullYear(),m=calendarMonth.getMonth(),first=new Date(y,m,1),days=new Date(y,m+1,0).getDate();
+ $("calendar-title").textContent=first.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+ let html=["D","S","T","Q","Q","S","S"].map(n=>`<div class="weekday">${n}</div>`).join("");
+ for(let i=0;i<first.getDay();i++)html+="<div></div>";
+ for(let d=1;d<=days;d++){let done=trained.has(`${y}-${m}-${d}`),today=y===new Date().getFullYear()&&m===new Date().getMonth()&&d===new Date().getDate();html+=`<div class="${done?"trained ":""}${today?"today":""}">${d}${done?" ✓":""}</div>`}
+ $("calendar-grid").innerHTML=html;
+}
+function renderPhase(){
+ const h=history().slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+ if(!h.length){$("phase-tag").textContent="Ainda não iniciado";$("phase-name").textContent="Registre seu primeiro treino";$("phase-desc").textContent="A contagem começa na primeira sessão salva.";$("phase-bar").style.width="0%";$("phase-next").textContent="Meta inicial: 2 sessões por semana durante 2 semanas.";return}
+ const start=new Date(h[0].date),days=Math.max(0,Math.floor((new Date()-start)/86400000)),week=Math.floor(days/7)+1,phase=week<=2?1:week<=4?2:3;
+ const cfg={
+  1:["Readaptação","Semanas 1–2 · 2 sessões por semana · 1–2 séries por exercício · esforço moderado (3–4 repetições na reserva).","Próxima etapa: após pelo menos 2 semanas e cerca de 4 sessões, se estiver recuperando bem."],
+  2:["Construção de consistência","Semanas 3–4 · até 3 sessões por semana · cerca de 2 séries por exercício · 2–3 repetições na reserva.","Próxima etapa: após mais 2 semanas, se frequência, técnica e recuperação estiverem boas."],
+  3:["Desenvolvimento","A partir da semana 5 · 3 sessões por semana · aumentar volume gradualmente, sem perseguir falha muscular.","Mantenha a progressão gradual. Aumente séries ou carga, não tudo de uma vez."]
+ }[phase];
+ $("phase-tag").textContent=`Fase ${phase}`;$("phase-name").textContent=cfg[0];$("phase-desc").textContent=cfg[1];$("phase-next").textContent=`${cfg[2]} Sessões registradas: ${h.length}.`;$("phase-bar").style.width=(phase===1?Math.min(100,days/14*100):phase===2?Math.min(100,(days-14)/14*100):100)+"%";
+}
 function render(){
+ renderCalendar();renderPhase();
  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.session===session));
  $("workout").classList.toggle("hidden",session==="history");$("history").classList.toggle("hidden",session!=="history");
  if(session==="history"){renderHistory();return}
  $("session-title").textContent=data[session].title;$("notes").value=notes[session]||"";
+ document.querySelectorAll('input[name="warmup"]').forEach(el=>el.checked=el.value===(warmups[session]||""));
  const items=data[session].items,done=checks[session]||[];$("count").textContent=`${done.length}/${items.length}`;$("bar").style.width=(done.length/items.length*100)+"%";
  $("progress-label").textContent=done.length===items.length?"Sessão completa!":"Marque os exercícios concluídos.";
  $("exercise-list").innerHTML=items.map((e,i)=>`<div class="exercise"><div class="exhead"><input type="checkbox" data-check="${e.id}" ${done.includes(e.id)?"checked":""}><div class="exbody"><h3>${i+1}. ${e.name}</h3><div class="dose">${e.dose}</div><p>${e.focus}</p><p class="small">${e.how}</p><label class="small">Carga / observação<input type="text" data-load="${e.id}" value="${esc(loads[session][e.id]||"")}" placeholder="Ex.: 40 kg · 10, 9, 8 repetições"></label></div></div></div>`).join("");
  $("exercise-list").querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",()=>{let id=el.dataset.check;checks[session]=el.checked?[...checks[session],id]:checks[session].filter(x=>x!==id);save();render()}));
  $("exercise-list").querySelectorAll("[data-load]").forEach(el=>el.addEventListener("input",()=>{loads[session][el.dataset.load]=el.value;save()}));save();
 }
+$("prev-month").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);renderCalendar()});
+$("next-month").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);renderCalendar()});
 document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>{notes[session]=$("notes").value;session=el.dataset.session;save();render()}));
+document.querySelectorAll('input[name="warmup"]').forEach(el=>el.addEventListener("change",()=>{warmups[session]=el.value;save()}));
 $("notes").addEventListener("input",()=>{notes[session]=$("notes").value;save()});
 $("reset").addEventListener("click",()=>{if(confirm("Desmarcar os exercícios desta sessão?")){checks[session]=[];render()}});
-$("finish").addEventListener("click",()=>{let item={date:new Date().toISOString(),session,done:[...checks[session]],loads:{...loads[session]},notes:$("notes").value};if(!item.done.length&&!item.notes.trim()){alert("Marque algum exercício ou escreva uma anotação.");return}let h=history();h.unshift(item);localStorage.setItem("pcf-gym-history",JSON.stringify(h));checks[session]=[];notes[session]="";save();alert("Sessão salva.");render()});
-function renderHistory(){let h=history();$("total").textContent=h.length;$("last").textContent=h.length?new Date(h[0].date).toLocaleDateString("pt-BR"):"—";$("history-list").innerHTML=h.length?h.map(x=>`<div class="history-item"><b>Treino ${x.session}</b> · ${new Date(x.date).toLocaleString("pt-BR")}<br><span class="small">${x.done.length} exercícios marcados</span>${x.notes?`<p>${esc(x.notes)}</p>`:""}</div>`).join(""):"<p class='small'>Nenhuma sessão salva ainda.</p>"}
-$("export").addEventListener("click",()=>{let b=new Blob([JSON.stringify({history:history(),draft:{checks,loads,notes,session}},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="corpo-forte-academia-backup.json";a.click();URL.revokeObjectURL(a.href)});
+$("finish").addEventListener("click",()=>{let item={date:new Date().toISOString(),session,done:[...checks[session]],loads:{...loads[session]},notes:$("notes").value,warmup:warmups[session]||""};if(!item.done.length&&!item.notes.trim()){alert("Marque algum exercício ou escreva uma anotação.");return}let h=history();h.unshift(item);localStorage.setItem("pcf-gym-history",JSON.stringify(h));checks[session]=[];notes[session]="";warmups[session]="";save();alert("Sessão salva.");render()});
+function renderHistory(){let h=history();$("total").textContent=h.length;$("last").textContent=h.length?new Date(h[0].date).toLocaleDateString("pt-BR"):"—";const days=[...new Set(h.map(x=>new Date(x.date).toLocaleDateString("pt-BR")))];$("history-list").innerHTML=`<h3 style="margin-top:16px">Dias com treino registrado (${days.length})</h3><p class="small">${days.join(" · ")||"Nenhum dia registrado ainda."}</p>`+(h.length?h.map(x=>`<div class="history-item"><b>Treino ${x.session}</b> · ${new Date(x.date).toLocaleString("pt-BR")}<br><span class="small">${x.done.length} exercícios marcados${x.warmup?" · Aquecimento: "+esc(x.warmup):""}</span>${x.notes?`<p>${esc(x.notes)}</p>`:""}</div>`).join(""):"<p class='small'>Nenhuma sessão salva ainda.</p>")}
+$("export").addEventListener("click",()=>{let b=new Blob([JSON.stringify({history:history(),draft:{checks,loads,notes,warmups,session}},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="corpo-forte-academia-backup.json";a.click();URL.revokeObjectURL(a.href)});
 $("import-btn").addEventListener("click",()=>$("import-file").click());
-$("import-file").addEventListener("change",async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text());if(Array.isArray(x.history))localStorage.setItem("pcf-gym-history",JSON.stringify(x.history));if(x.draft){checks=x.draft.checks||checks;loads=x.draft.loads||loads;notes=x.draft.notes||notes;session=x.draft.session||session;save()}alert("Backup importado.");render()}catch{alert("Backup inválido.")}});
-try{let x=JSON.parse(localStorage.getItem("pcf-gym-draft")||"{}");checks=x.checks||checks;loads=x.loads||loads;notes=x.notes||notes;session=x.session||"A"}catch{}render();
+$("import-file").addEventListener("change",async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text());if(Array.isArray(x.history))localStorage.setItem("pcf-gym-history",JSON.stringify(x.history));if(x.draft){checks=x.draft.checks||checks;loads=x.draft.loads||loads;notes=x.draft.notes||notes;warmups=x.draft.warmups||warmups;session=x.draft.session||session;save()}alert("Backup importado.");render()}catch{alert("Backup inválido.")}});
+try{let x=JSON.parse(localStorage.getItem("pcf-gym-draft")||"{}");checks=x.checks||checks;loads=x.loads||loads;notes=x.notes||notes;warmups=x.warmups||warmups;session=x.session||"A"}catch{}render();
 // Atualizações do PWA: consulta a versão publicada sem apagar dados locais.
 let swRegistration=null, reloadingForUpdate=false;
 async function checkForAppUpdate(manual=false){
