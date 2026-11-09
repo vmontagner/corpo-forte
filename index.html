@@ -21,7 +21,7 @@ input[type=text],textarea{width:100%;background:#101815;color:var(--txt);border:
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--panel2);padding:12px;border-radius:12px}.stat strong{display:block;font-size:1.3rem}
 .history-item{border-top:1px solid var(--line);padding:10px 0;font-size:.9rem}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px}
 </style></head><body>
-<header><h1>Projeto Corpo Forte</h1><p>Treino de academia · força, função e autonomia</p></header>
+<header><div class="row"><div><h1>Projeto Corpo Forte</h1><p>Treino de academia · força, função e autonomia</p></div><button class="ghost" id="check-update" style="font-size:.78rem;padding:8px 9px">↻ Atualizar</button></div><p id="update-status" class="small" aria-live="polite" style="margin-top:7px"></p></header>
 <main>
 <section class="card"><div class="row"><div><div class="small">ROTINA SUGERIDA</div><strong>3 sessões de corpo inteiro</strong></div><span class="tag">A / B</span></div>
 <p class="small">Exemplo: seg A · qua B · sex A; na semana seguinte, B · A · B. Se só conseguir 2 dias, faça A e B.</p></section>
@@ -84,5 +84,21 @@ $("export").addEventListener("click",()=>{let b=new Blob([JSON.stringify({histor
 $("import-btn").addEventListener("click",()=>$("import-file").click());
 $("import-file").addEventListener("change",async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text());if(Array.isArray(x.history))localStorage.setItem("pcf-gym-history",JSON.stringify(x.history));if(x.draft){checks=x.draft.checks||checks;loads=x.draft.loads||loads;notes=x.draft.notes||notes;session=x.draft.session||session;save()}alert("Backup importado.");render()}catch{alert("Backup inválido.")}});
 try{let x=JSON.parse(localStorage.getItem("pcf-gym-draft")||"{}");checks=x.checks||checks;loads=x.loads||loads;notes=x.notes||notes;session=x.session||"A"}catch{}render();
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+// Atualizações do PWA: consulta a versão publicada sem apagar dados locais.
+let swRegistration=null, reloadingForUpdate=false;
+async function checkForAppUpdate(manual=false){
+ const status=$("update-status");
+ if(!("serviceWorker" in navigator)){if(manual)status.textContent="Atualização automática não disponível neste navegador.";return}
+ try{
+  if(!swRegistration) swRegistration=await navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"});
+  await swRegistration.update();
+  if(swRegistration.waiting){status.textContent="Atualização encontrada. Aplicando…";swRegistration.waiting.postMessage({type:"SKIP_WAITING"});return}
+  if(manual)status.textContent="Você já está usando a versão mais recente.";
+ }catch(e){if(manual)status.textContent="Não foi possível verificar agora. Confira sua conexão e tente novamente."}
+}
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!reloadingForUpdate){reloadingForUpdate=true;window.location.reload()}});
+ window.addEventListener("load",()=>checkForAppUpdate(false));
+}
+$("check-update").addEventListener("click",()=>{ $("update-status").textContent="Verificando atualização…";checkForAppUpdate(true) });
 </script></body></html>
