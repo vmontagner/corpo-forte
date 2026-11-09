@@ -1,1 +1,9 @@
-{"name":"Projeto Corpo Forte - Academia","short_name":"Corpo Forte","start_url":"./","scope":"./","display":"standalone","background_color":"#101815","theme_color":"#14251f","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+ "name":"Projeto Corpo Forte",
+ "short_name":"Corpo Forte",
+ "start_url":"./",
+ "display":"standalone",
+ "background_color":"#101815",
+ "theme_color":"#14251f",
+ "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

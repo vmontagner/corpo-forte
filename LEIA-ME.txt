@@ -1,15 +1,18 @@
-PROJETO CORPO FORTE — VERSÃO 6
-Login separado + página de opções + sessão persistente
+PROJETO CORPO FORTE — VERSÃO 9
+Guia visual sequencial para 3 exercícios (3 etapas por exercício).
+
+O que mudou
+- Botão “Ver execução” em terra romeno com halteres, supino inclinado com halteres e dead bug.
+- Três quadros esquemáticos originais por exercício, com instruções em português.
+- Imagens locais incluídas no cache do PWA para consulta offline.
+- Mantidos login Supabase, sincronização, histórico, backup e registro individual de séries da v8.
 
 PUBLICAÇÃO
-1. No repositório GitHub Pages vmontagner/corpo-forte, substitua index.html e sw.js pelos arquivos desta pasta.
-2. Faça commit dos dois arquivos.
-3. Não substitua nem apague manifest.webmanifest e icon.svg que já existem no repositório.
-4. Abra https://vmontagner.github.io/corpo-forte/ e toque em Atualizar, se necessário.
+1. Extraia o ZIP.
+2. Substitua no repositório GitHub Pages os arquivos index.html, sw.js, manifest.webmanifest, icon.svg e a pasta assets.
+3. Faça commit na branch main.
+4. Abra o app e toque em Atualizar, se necessário.
 
-SESSÃO
-O Supabase está configurado para persistir a sessão no armazenamento local do navegador, renovar tokens automaticamente e reconhecer o retorno do link de confirmação.
-Em condições normais, você continuará conectado ao fechar e reabrir o app. Só será necessário entrar novamente se sair manualmente, limpar os dados do navegador/aplicativo, revogar a sessão ou se ela expirar por política de segurança.
-
-SEGURANÇA
-O arquivo mantém a URL e a chave publishable já configuradas. Nunca coloque uma chave secret/service_role no aplicativo.
+IMPORTANTE
+As ilustrações são esquemas educativos originais, não fotografias nem reprodução de imagens de terceiros. Use-as como referência geral e priorize as orientações técnicas escritas.
+A chave Supabase publishable já configurada foi mantida. Nunca inclua chave secret/service_role no app.
