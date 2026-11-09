@@ -1,18 +1,9 @@
-PROJETO CORPO FORTE — VERSÃO 9
-Guia visual sequencial para 3 exercícios (3 etapas por exercício).
+Projeto Corpo Forte — v9 em arquivo único
 
-O que mudou
-- Botão “Ver execução” em terra romeno com halteres, supino inclinado com halteres e dead bug.
-- Três quadros esquemáticos originais por exercício, com instruções em português.
-- Imagens locais incluídas no cache do PWA para consulta offline.
-- Mantidos login Supabase, sincronização, histórico, backup e registro individual de séries da v8.
+Para atualizar pelo celular, substitua SOMENTE estes dois arquivos na raiz do repositório:
+- index.html
+- sw.js
 
-PUBLICAÇÃO
-1. Extraia o ZIP.
-2. Substitua no repositório GitHub Pages os arquivos index.html, sw.js, manifest.webmanifest, icon.svg e a pasta assets.
-3. Faça commit na branch main.
-4. Abra o app e toque em Atualizar, se necessário.
-
-IMPORTANTE
-As ilustrações são esquemas educativos originais, não fotografias nem reprodução de imagens de terceiros. Use-as como referência geral e priorize as orientações técnicas escritas.
-A chave Supabase publishable já configurada foi mantida. Nunca inclua chave secret/service_role no app.
+As nove ilustrações SVG estão embutidas no index.html. Não é necessário enviar a pasta assets.
+Mantenha manifest.webmanifest e icon.svg já existentes no repositório.
+Depois faça commit e abra o PWA; use Atualizar se necessário.
